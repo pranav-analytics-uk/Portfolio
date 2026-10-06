@@ -1,5 +1,6 @@
 import FadeIn from './FadeIn';
 import Magnet from './Magnet';
+import IntroAvatar from './IntroAvatar';
 import ContactButton from './ContactButton';
 import { PROFILE, asset } from '../data';
 
@@ -55,6 +56,8 @@ export default function HeroSection() {
           <ContactButton />
         </FadeIn>
       </div>
+
+      <IntroAvatar />
 
       {/* Portrait: dark studio shot, edges faded into the page background */}
       <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-[46%] sm:bottom-0 sm:top-auto sm:translate-y-0">

@@ -66,11 +66,18 @@ export const EDUCATION = [
   { school: 'Noida International University', degree: "Bachelor's, Photography · Grade A+", period: 'Jul 2022 – Jun 2025' },
 ];
 
-// Talking welcome intro for the hero (planned). Script approved by Pranav; the player is built
-// once the video exists (real recording or AI avatar). Sound only plays after the visitor taps.
+// Talking AI-avatar welcome in the hero (src/components/IntroAvatar.tsx).
+// Source: ~/Desktop/A1.mp4 (Gemini), square-cropped to 720px. Captions are timed to the audio.
 export const INTRO = {
-  video: '', // e.g. 'intro/pranav-intro.mp4' in public/. Empty = not shown yet
+  video: 'intro/pranav-intro.mp4', // empty = avatar hidden
+  poster: 'intro/pranav-intro-poster.webp',
   script: "Hi, I'm Pranav, a campaign strategist and brand communicator. I'm here to build brands people talk about. Welcome in.",
+  captions: [
+    { start: 0.2, end: 1.5, text: "Hi, I'm Pranav," },
+    { start: 1.5, end: 4.4, text: 'a campaign strategist and brand communicator.' },
+    { start: 4.4, end: 7.0, text: "I'm here to build brands people talk about." },
+    { start: 7.0, end: 8.7, text: 'Welcome in.' },
+  ],
 };
 
 // Keyword block for recruiters. Only skills backed by LinkedIn or confirmed by Pranav.

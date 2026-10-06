@@ -48,7 +48,7 @@ Run that first in every shell from this folder. `gh` is already signed in to the
 | Sitemap / robots | `public/sitemap.xml` (update `lastmod` on big changes), `public/robots.txt` |
 | Link-preview image (LinkedIn/WhatsApp card) | `public/og-image-v2.jpg` (1200×630, stays JPG for social crawlers). Regenerate with `scripts/og-image.swift`; bump the file name (v3…) and update `index.html` so LinkedIn refetches |
 | Page title, share-preview text | `index.html` |
-| Welcome intro video + approved script (planned) | `src/data.ts` → `INTRO`. Not built yet: needs the video file. Plan: portrait stays as poster, tap-to-play with sound, captions = the script, plays once per visit, replay button |
+| Talking AI-avatar welcome (hero bubble) | `src/components/IntroAvatar.tsx`; video/poster/script/caption timings in `src/data.ts` → `INTRO`. Files: `public/intro/pranav-intro.mp4` (720×720 square crop of `~/Desktop/A1.mp4`, H.264 2.2 Mbps + AAC) and `pranav-intro-poster.webp`. Plays with sound on the visitor's first click/tap/key while the hero is visible (once per visit via sessionStorage) or via the bubble; pauses when scrolled away; captions are custom, timed to the audio. To replace the video: square-crop with an AVFoundation script (no ffmpeg on this Mac), re-time `INTRO.captions` |
 | Layout/styling of a section | `src/components/<Section>.tsx` |
 
 Section order is in `src/App.tsx`: Hero → Marquee → About → Experience → Hero Campaign → Published Work → Contact.
