@@ -1,9 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { Volume2 } from 'lucide-react';
+import { Play, RotateCcw, Square, Volume2 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { INTRO, asset } from '../data';
 import { track } from '../analytics';
-import Magnet from './Magnet';
 
 // The hero centrepiece: Pranav's talking AI avatar.
 // It starts speaking as soon as the visitor shows up (first mouse move, scroll, touch,
@@ -135,7 +134,6 @@ export default function IntroAvatar() {
         ref={wrapRef}
         className="absolute left-1/2 top-[44%] z-10 -translate-x-1/2 -translate-y-1/2 sm:top-[14%] sm:translate-y-0"
       >
-        <Magnet padding={150} strength={3} activeTransition="transform 0.3s ease-out" inactiveTransition="transform 0.6s ease-in-out">
           <button
             type="button"
             onClick={() => start('avatar_click', true)}
@@ -159,10 +157,26 @@ export default function IntroAvatar() {
               style={{ WebkitMaskImage: MASK, maskImage: MASK }}
             />
           </button>
-        </Magnet>
-        <p className="pointer-events-none absolute bottom-[16%] right-[4%] rounded-full border border-[#D7E2EA]/20 bg-[#0C0C0C]/60 px-2 py-0.5 text-[9px] font-light uppercase tracking-[0.25em] text-[#D7E2EA]/60 backdrop-blur sm:text-[10px]">
-          AI avatar
-        </p>
+        {/* The original "Meet Pranav" label: play / stop / replay */}
+        <button
+          type="button"
+          onClick={() => (state === 'playing' && !muted ? stop() : start('label', true))}
+          className="absolute bottom-[16%] right-[2%] flex items-center gap-1.5 whitespace-nowrap rounded-full border border-[#D7E2EA]/40 bg-[#0C0C0C]/70 px-3 py-1 text-[10px] font-medium uppercase tracking-widest text-[#D7E2EA] backdrop-blur transition-colors hover:bg-[#D7E2EA]/10 sm:text-xs"
+        >
+          {state === 'playing' && !muted ? (
+            <>
+              <Square className="h-2.5 w-2.5 fill-current" /> Stop
+            </>
+          ) : state === 'ended' ? (
+            <>
+              <RotateCcw className="h-3 w-3" /> Replay
+            </>
+          ) : (
+            <>
+              <Play className="h-3 w-3 fill-current" /> Meet Pranav
+            </>
+          )}
+        </button>
       </div>
 
       {/* Subtitles (and the sound hint when the browser blocked audio) */}

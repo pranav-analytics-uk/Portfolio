@@ -67,7 +67,8 @@ export const EDUCATION = [
 ];
 
 // Talking AI-avatar welcome in the hero (src/components/IntroAvatar.tsx).
-// Source: ~/Desktop/A1.mp4 (Gemini), square-cropped to 720px. Captions are timed to the audio.
+// Source: ~/Desktop/A2.mp4 (Gemini), square-cropped to 720px. Captions are timed to the audio.
+// Note: A2 mouths "Welcome in." at ~7.25s but has no audio there; the caption still shows it.
 export const INTRO = {
   video: 'intro/pranav-intro.mp4', // empty = avatar hidden
   poster: 'intro/pranav-intro-poster.webp',
