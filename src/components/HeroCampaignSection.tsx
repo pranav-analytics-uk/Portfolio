@@ -2,7 +2,8 @@ import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion
 import { useRef } from 'react';
 import { ArrowUpRight, Instagram } from 'lucide-react';
 import FadeIn from './FadeIn';
-import { HERO_POSTS, TECNO_INSTAGRAM, heroScreenshot, heroScreenshotSmall } from '../data';
+import { track } from '../analytics';
+import { HERO_CASE, HERO_POSTS, TECNO_INSTAGRAM, heroScreenshot, heroScreenshotSmall } from '../data';
 
 const RADIUS = 'rounded-[40px] sm:rounded-[50px] md:rounded-[60px]';
 const CHANNELS = ['Instagram', 'Facebook', 'LinkedIn', 'CAMON · POVA · SPARK'];
@@ -63,6 +64,7 @@ function PostCard({
           rel="noopener noreferrer"
           aria-label={post.url ? `Open "${post.title}" on Instagram` : 'Open @tecnomobileindia on Instagram'}
           className="group relative block"
+          onClick={() => track('view_campaign_post', { post: post.title })}
         >
           <img
             src={heroScreenshot(post.file)}
@@ -105,30 +107,32 @@ export default function HeroCampaignSection() {
         Hero Campaign
       </FadeIn>
 
-      <div className="mx-auto mt-10 flex max-w-3xl flex-col items-center gap-8 text-center sm:mt-14">
-        <FadeIn
-          as="p"
-          delay={0.1}
-          className="font-light leading-relaxed text-[#D7E2EA]"
-          style={{ fontSize: 'clamp(1rem, 1.8vw, 1.3rem)' }}
-        >
-          A six-part portrait series of India&apos;s gig and informal workers (chai vendors, welders, cycle mechanics,
-          porters and workshop craftsmen), photographed entirely on TECNO handsets. Every frame carried the device name
-          and full exposure data, so the photo itself became the proof of the camera. I created, directed and shot it.
-          One post went out each day on the brand&apos;s verified Instagram from 1 to 6 August 2025, cross-posted to
-          Facebook and LinkedIn.
-        </FadeIn>
-        <FadeIn delay={0.2} className="flex flex-wrap justify-center gap-2">
-          {CHANNELS.map((c) => (
-            <span
-              key={c}
-              className="rounded-full border border-[#D7E2EA]/40 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-[#D7E2EA] sm:text-sm"
-            >
-              {c}
-            </span>
-          ))}
-        </FadeIn>
+      <div className="mx-auto mt-10 grid max-w-6xl gap-4 sm:mt-14 md:grid-cols-3 md:gap-6">
+        {HERO_CASE.map((c, i) => (
+          <FadeIn
+            key={c.label}
+            delay={0.1 + i * 0.1}
+            className="rounded-[28px] border-2 border-[#D7E2EA]/20 p-6 text-left md:rounded-[36px] md:p-8"
+          >
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.25em] text-[#D7E2EA]/60 sm:text-sm">
+              {String(i + 1).padStart(2, '0')} · {c.label}
+            </p>
+            <p className="font-light leading-relaxed text-[#D7E2EA]" style={{ fontSize: 'clamp(0.95rem, 1.3vw, 1.1rem)' }}>
+              {c.text}
+            </p>
+          </FadeIn>
+        ))}
       </div>
+      <FadeIn delay={0.4} className="mt-8 flex flex-wrap justify-center gap-2">
+        {CHANNELS.map((c) => (
+          <span
+            key={c}
+            className="rounded-full border border-[#D7E2EA]/40 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-[#D7E2EA] sm:text-sm"
+          >
+            {c}
+          </span>
+        ))}
+      </FadeIn>
 
       <div ref={containerRef} className="mt-16 sm:mt-20">
         {HERO_POSTS.map((p, i) => (

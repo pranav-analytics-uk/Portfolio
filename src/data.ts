@@ -1,15 +1,20 @@
 // Portfolio content, sourced from Pranav's LinkedIn profile.
 
+// Google Analytics 4 Measurement ID (G-XXXXXXXXXX). Empty = no analytics and no cookie banner.
+export const ANALYTICS_ID = '';
+
 export const PROFILE = {
   firstName: 'Pranav',
   name: 'Pranav Raj Singh',
-  tagline: 'campaign strategy & brand communications, making brand work people stop scrolling for',
+  tagline: 'Campaign strategy & brand communications. I make brand work people stop scrolling for.',
   location: 'Glasgow, Scotland, UK',
   linkedin: 'https://www.linkedin.com/in/thepranavraj021',
   email: 'pranavrajsinghrajput@gmail.com',
   phone: '+44 7721 553986',
   phoneHref: 'tel:+447721553986',
   availability: 'Open to UK graduate roles from April 2027',
+  // Path of the CV PDF inside public/ (e.g. 'cv/Pranav_Raj_Singh_CV.pdf'). Empty = no Download CV button.
+  cv: '',
   about:
     "I'm a marketer and photographer who owns campaigns end to end, from the first idea to the final cut. At TECNO Mobile India I created Heroes, a six-part portrait series shot entirely on TECNO phones. Now I'm completing an MSc in Marketing at Strathclyde, building my AI and paid media skills. Let's make something people remember!",
 };
@@ -61,12 +66,35 @@ export const EDUCATION = [
   { school: 'Noida International University', degree: "Bachelor's, Photography · Grade A+", period: 'Jul 2022 – Jun 2025' },
 ];
 
+// Keyword block for recruiters. Only skills backed by LinkedIn or confirmed by Pranav.
+export const SKILLS = [
+  { group: 'Strategy', items: ['Campaign strategy', 'Brand strategy', 'Brand communications', 'Social media strategy', 'Content strategy', 'Consumer research'] },
+  { group: 'Execution', items: ['Creative direction', 'Agency management', 'Stakeholder management', 'Photography', 'Video production'] },
+  { group: 'Tools', items: ['GA4', 'Google Ads', 'SEO', 'A/B testing', 'Adobe Photoshop', 'Adobe Premiere Pro', 'Canva'] },
+];
+
 export const CERTIFICATIONS = [
   'Google Ads Search Certification (2026)',
   'Google Analytics Certification (2026)',
   'SEO with Squarespace · Coursera',
   'Advanced Google Ads · LinkedIn',
   'Advanced Prompt Engineering Techniques · LinkedIn',
+];
+
+// Heroes case study, shown above the post cards.
+export const HERO_CASE = [
+  {
+    label: 'Brief',
+    text: 'Prove TECNO camera quality across three price tiers (CAMON, POVA and SPARK) with one idea that felt true to India, without falling back on a spec comparison.',
+  },
+  {
+    label: 'What I did',
+    text: "Created, directed and shot a six-part portrait series of India's gig and informal workers on TECNO phones. Every frame carried the device name and full exposure data, so the photo itself was the proof. One post a day on the brand's verified Instagram, 1 to 6 August 2025, cross-posted to Facebook and LinkedIn.",
+  },
+  {
+    label: 'Result',
+    text: '~253K likes across the six posts, five of them between 39.5K and 69K. More engagement than any other owned social content produced during my time at the brand.',
+  },
 ];
 
 // The six Heroes posts, in publishing order.
@@ -84,9 +112,10 @@ export const TECNO_INSTAGRAM = 'https://www.instagram.com/tecnomobileindia/';
 
 // Asset paths go through BASE_URL so the site works under /Portfolio/ on GitHub Pages.
 export const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
-export const heroPhoto = (n: number) => asset(`hero-campaign/photo-${n}.jpg`);
-export const heroScreenshot = (n: number) => asset(`hero-campaign/hero-${n}.jpg`);
-export const heroScreenshotSmall = (n: number) => asset(`hero-campaign/hero-${n}-sm.jpg`);
+export const heroPhoto = (n: number) => asset(`hero-campaign/photo-${n}.webp`);
+export const heroPhotoSmall = (n: number) => asset(`hero-campaign/photo-${n}-sm.webp`);
+export const heroScreenshot = (n: number) => asset(`hero-campaign/hero-${n}.webp`);
+export const heroScreenshotSmall = (n: number) => asset(`hero-campaign/hero-${n}-sm.webp`);
 
 export const FILMS = [
   { id: '8JRVesGVlO0', title: 'India, Stop At Nothing.', series: 'TECNO Mobile India' },

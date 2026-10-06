@@ -39,9 +39,14 @@ Run that first in every shell from this folder. `gh` is already signed in to the
 | Hero Campaign posts (title, likes, date, **Instagram link** `url`) | `src/data.ts` → `HERO_POSTS` |
 | YouTube films (video id + title) | `src/data.ts` → `FILMS` |
 | Instagram reels (post URL + title) | `src/data.ts` → `REELS` |
-| Hero portrait photo | `public/me/pranav.jpg` (≈1600px tall, phones) and `public/me/pranav-full.jpg` (full res, desktop/retina) |
-| Hero Campaign screenshots | `public/hero-campaign/hero-N.jpg` (full res), `hero-N-sm.jpg` (≈1100px, phones), `photo-N.jpg` (photo cropped from the screenshot: left 1147×1311 px) |
-| Link-preview image (LinkedIn/WhatsApp card) | `public/og-image-v2.jpg` (1200×630) |
+| Hero portrait photo | `public/me/pranav.webp` (≈1600px tall, phones) and `public/me/pranav-full.webp` (full res 2156×3232, desktop/retina). Source: `~/Downloads/_STU2635.jpg` |
+| Hero Campaign screenshots | `public/hero-campaign/hero-N.webp` (full res 2150px), `hero-N-sm.webp` (1100px, phones), `photo-N.webp` (photo cropped from the screenshot: left 1147×1311 px), `photo-N-sm.webp` (640px, marquee/About). Sources: `~/Desktop/Hero Campaign/*.png` |
+| Heroes case study (Brief / What I did / Result) | `src/data.ts` → `HERO_CASE` |
+| Skills & Tools chips | `src/data.ts` → `SKILLS` (only list skills Pranav has confirmed) |
+| Download CV button | Put the PDF in `public/cv/` and set `PROFILE.cv` in `src/data.ts` (e.g. `'cv/Pranav_Raj_Singh_CV.pdf'`). Empty = button hidden |
+| Google Analytics | `ANALYTICS_ID` in `src/data.ts` (G-XXXXXXXXXX). Empty = no analytics, no cookie banner. Logic in `src/analytics.ts`, banner in `src/components/ConsentBanner.tsx` |
+| Sitemap / robots | `public/sitemap.xml` (update `lastmod` on big changes), `public/robots.txt` |
+| Link-preview image (LinkedIn/WhatsApp card) | `public/og-image-v2.jpg` (1200×630, stays JPG for social crawlers). Regenerate with `scripts/og-image.swift`; bump the file name (v3…) and update `index.html` so LinkedIn refetches |
 | Page title, share-preview text | `index.html` |
 | Layout/styling of a section | `src/components/<Section>.tsx` |
 
@@ -50,6 +55,8 @@ Section order is in `src/App.tsx`: Hero → Marquee → About → Experience →
 ## Rules to keep
 
 - **Asset paths:** always use `asset('path')` / the helpers in `src/data.ts`, never a leading `/`. The site lives under `/Portfolio/` (`base` in `vite.config.ts`); root paths break on the live site.
-- **New images:** add a full-res file plus a smaller phone copy and use `srcSet` (see `HeroSection.tsx` / `HeroCampaignSection.tsx`). Convert with `sips` (built into macOS).
+- **New images:** WebP only (except the og image). Add a full-res file plus a smaller phone copy and use `srcSet` (see `HeroSection.tsx` / `HeroCampaignSection.tsx`). Convert with `scripts/to-webp.mjs`; `sips` (macOS) can resize/crop but cannot write WebP.
+- **Analytics consent:** Google scripts must only load after the visitor clicks Accept (`src/analytics.ts`). Track new key actions with `track('event_name', {...})`.
+- **Accessibility:** animated text must keep a screen-reader copy (see `AnimatedText.tsx`: `sr-only` text + `aria-hidden` letters).
 - **Phone layout:** phones get swipe rows for films/reels, stacked experience rows, and hidden About corner photos. Anything new must be checked at 390px wide with no sideways scrolling.
 - Style: dark `#0C0C0C`, font Kanit, gradient headings use the `.hero-heading` class, buttons are `ContactButton` / `LiveProjectButton`.

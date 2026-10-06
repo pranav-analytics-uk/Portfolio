@@ -1,6 +1,6 @@
 import FadeIn from './FadeIn';
 import AnimatedText from './AnimatedText';
-import { PROFILE, STATS, heroPhoto } from '../data';
+import { PROFILE, STATS, heroPhotoSmall } from '../data';
 
 // Four frames from the Heroes series stand in for the template's 3D corner objects.
 const DECOR = [
@@ -25,7 +25,7 @@ export default function AboutSection() {
           duration={0.9}
           className={`pointer-events-none absolute hidden opacity-70 sm:block ${d.className}`}
         >
-          <img src={heroPhoto(d.n)} alt="" className="h-auto w-full rounded-2xl border border-[#D7E2EA]/30 md:rounded-3xl" />
+          <img src={heroPhotoSmall(d.n)} alt="" className="h-auto w-full rounded-2xl border border-[#D7E2EA]/30 md:rounded-3xl" />
         </FadeIn>
       ))}
 

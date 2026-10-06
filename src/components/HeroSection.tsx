@@ -1,6 +1,7 @@
 import FadeIn from './FadeIn';
 import Magnet from './Magnet';
 import ContactButton from './ContactButton';
+import CvButton from './CvButton';
 import { PROFILE, asset } from '../data';
 
 // Fades all four edges so the photo's studio backdrop melts into the page.
@@ -45,13 +46,14 @@ export default function HeroSection() {
       <div className="relative z-20 mt-auto flex items-end justify-between gap-4 px-6 pb-7 sm:pb-8 md:px-10 md:pb-10">
         <FadeIn delay={0.35} y={20}>
           <p
-            className="max-w-[190px] font-light uppercase leading-snug tracking-wide text-[#D7E2EA] sm:max-w-[220px] md:max-w-[280px]"
+            className="max-w-[200px] font-light uppercase leading-snug tracking-wide text-[#D7E2EA] sm:max-w-[220px] md:max-w-[280px]"
             style={{ fontSize: 'clamp(0.75rem, 1.4vw, 1.5rem)' }}
           >
             {PROFILE.tagline}
           </p>
         </FadeIn>
-        <FadeIn delay={0.5} y={20}>
+        <FadeIn delay={0.5} y={20} className="flex flex-col items-end gap-2 sm:flex-row sm:items-center sm:gap-3">
+          <CvButton placement="hero" />
           <ContactButton />
         </FadeIn>
       </div>
@@ -66,8 +68,8 @@ export default function HeroSection() {
             inactiveTransition="transform 0.6s ease-in-out"
           >
             <img
-              src={asset('me/pranav.jpg')}
-              srcSet={`${asset('me/pranav.jpg')} 1067w, ${asset('me/pranav-full.jpg')} 2156w`}
+              src={asset('me/pranav.webp')}
+              srcSet={`${asset('me/pranav.webp')} 1067w, ${asset('me/pranav-full.webp')} 2156w`}
               sizes="(min-width: 640px) 60vh, 45vh"
               alt="Portrait of Pranav Raj Singh"
               draggable={false}

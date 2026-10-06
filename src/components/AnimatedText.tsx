@@ -40,6 +40,9 @@ export default function AnimatedText({ text, className, style }: AnimatedTextPro
 
   return (
     <p ref={ref} className={className} style={style}>
+      {/* Real sentence for search engines and screen readers; the per-letter copy below is visual only */}
+      <span className="sr-only">{text}</span>
+      <span aria-hidden="true">
       {words.map((word, wi) => {
         const chars = (wi < words.length - 1 ? word + ' ' : word).split('');
         return (
@@ -54,6 +57,7 @@ export default function AnimatedText({ text, className, style }: AnimatedTextPro
           </span>
         );
       })}
+      </span>
     </p>
   );
 }

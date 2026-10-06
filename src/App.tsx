@@ -5,6 +5,7 @@ import ExperienceSection from './components/ExperienceSection';
 import HeroCampaignSection from './components/HeroCampaignSection';
 import PublishedWorkSection from './components/PublishedWorkSection';
 import ContactSection from './components/ContactSection';
+import ConsentBanner from './components/ConsentBanner';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
       <HeroCampaignSection />
       <PublishedWorkSection />
       <ContactSection />
+      <ConsentBanner />
     </main>
   );
 }

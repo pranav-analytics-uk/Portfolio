@@ -1,0 +1,4 @@
+# Only takes effect when the site is served from a domain root (e.g. a custom domain).
+User-agent: *
+Allow: /
+Sitemap: https://pranav-analytics-uk.github.io/Portfolio/sitemap.xml

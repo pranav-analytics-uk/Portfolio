@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ArrowRight, Instagram, Play } from 'lucide-react';
 import FadeIn from './FadeIn';
+import { track } from '../analytics';
 import { FILMS, REELS } from '../data';
 
 function YouTubeEmbed({ id, title }: { id: string; title: string }) {
@@ -17,9 +18,12 @@ function YouTubeEmbed({ id, title }: { id: string; title: string }) {
           allowFullScreen
         />
       ) : (
-        <button type="button" onClick={() => setPlaying(true)} className="group absolute inset-0" aria-label={`Play ${title}`}>
+        <button type="button" onClick={() => {
+            setPlaying(true);
+            track('play_film', { film: title });
+          }} className="group absolute inset-0" aria-label={`Play ${title}`}>
           <img
-            src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`}
+            src={`https://i.ytimg.com/vi/${id}/maxresdefault.jpg`}
             alt=""
             loading="lazy"
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"

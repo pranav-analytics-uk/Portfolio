@@ -1,6 +1,8 @@
 import { Linkedin, Mail, MapPin, Phone } from 'lucide-react';
 import FadeIn from './FadeIn';
 import ContactButton from './ContactButton';
+import CvButton from './CvButton';
+import { analyticsEnabled, track } from '../analytics';
 import { PROFILE } from '../data';
 
 const CHANNELS = [
@@ -37,6 +39,7 @@ export default function ContactSection() {
           <FadeIn key={label} delay={0.15 + i * 0.1}>
             <a
               href={href}
+              onClick={() => track('contact_click', { method: label.toLowerCase() })}
               {...(href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
               className="group flex h-full items-center gap-4 rounded-[28px] border-2 border-[#D7E2EA]/30 px-6 py-5 text-left text-[#D7E2EA] sm:flex-col sm:gap-3 sm:rounded-[32px] sm:px-5 sm:py-8 sm:text-center transition-colors duration-200 hover:border-[#D7E2EA] hover:bg-[#D7E2EA]/5"
             >
@@ -52,12 +55,24 @@ export default function ContactSection() {
         ))}
       </div>
 
-      <FadeIn delay={0.45}>
+      <FadeIn delay={0.45} className="flex flex-wrap items-center justify-center gap-3">
         <ContactButton href={`mailto:${PROFILE.email}`} label="Email me" />
+        <CvButton placement="contact" />
       </FadeIn>
 
       <footer className="mt-12 flex w-full max-w-7xl flex-col-reverse items-center justify-between gap-6 sm:mt-16 sm:flex-row sm:flex-wrap sm:gap-4 text-xs uppercase tracking-widest text-[#D7E2EA]/50">
-        <span>© 2026 {PROFILE.name}</span>
+        <span className="flex items-center gap-4">
+          © 2026 {PROFILE.name}
+          {analyticsEnabled && (
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new Event('open-cookie-settings'))}
+              className="-my-2 py-2 uppercase tracking-widest transition-opacity hover:opacity-70"
+            >
+              Cookie settings
+            </button>
+          )}
+        </span>
         <div className="flex items-center gap-6">
           <a href={`mailto:${PROFILE.email}`} className="-my-2 flex items-center gap-2 py-2 transition-opacity hover:opacity-70">
             <Mail className="h-4 w-4" /> Email

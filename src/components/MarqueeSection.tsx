@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { FILMS, HERO_POSTS, heroPhoto } from '../data';
+import { FILMS, HERO_POSTS, heroPhotoSmall } from '../data';
 
-const ROW_1 = HERO_POSTS.map((p) => ({ src: heroPhoto(p.file), alt: p.title, w: 'w-[236px]' }));
+const ROW_1 = HERO_POSTS.map((p) => ({ src: heroPhotoSmall(p.file), alt: p.title, w: 'w-[236px]' }));
 const ROW_2 = FILMS.map((f) => ({
   src: `https://i.ytimg.com/vi/${f.id}/maxresdefault.jpg`,
   fallback: `https://i.ytimg.com/vi/${f.id}/hqdefault.jpg`,

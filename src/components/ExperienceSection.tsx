@@ -1,5 +1,5 @@
 import FadeIn from './FadeIn';
-import { CERTIFICATIONS, EDUCATION, EXPERIENCE } from '../data';
+import { CERTIFICATIONS, EDUCATION, EXPERIENCE, SKILLS } from '../data';
 
 const BORDER = '1px solid rgba(12, 12, 12, 0.15)';
 
@@ -49,7 +49,30 @@ export default function ExperienceSection() {
           </FadeIn>
         ))}
 
-        <div className="mt-16 grid gap-12 text-[#0C0C0C] sm:mt-20 md:mt-24 md:grid-cols-2">
+        <FadeIn className="mt-16 text-[#0C0C0C] sm:mt-20 md:mt-24">
+          <h3 className="mb-6 font-black uppercase" style={{ fontSize: 'clamp(1.5rem, 3vw, 2.5rem)' }}>
+            Skills &amp; Tools
+          </h3>
+          <div className="grid gap-6 md:grid-cols-3">
+            {SKILLS.map((g) => (
+              <div key={g.group}>
+                <p className="mb-3 text-xs font-medium uppercase tracking-widest opacity-50 sm:text-sm">{g.group}</p>
+                <ul className="flex flex-wrap gap-2">
+                  {g.items.map((s) => (
+                    <li
+                      key={s}
+                      className="rounded-full border border-[#0C0C0C]/20 px-3.5 py-1.5 text-sm font-medium text-[#0C0C0C]"
+                    >
+                      {s}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </FadeIn>
+
+        <div className="mt-16 grid gap-12 text-[#0C0C0C] sm:mt-20 md:grid-cols-2">
           <FadeIn>
             <h3 className="mb-6 font-black uppercase" style={{ fontSize: 'clamp(1.5rem, 3vw, 2.5rem)' }}>
               Education
