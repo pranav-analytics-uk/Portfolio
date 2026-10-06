@@ -2,7 +2,7 @@
 
 Live: **https://pranav-analytics-uk.github.io/Portfolio/**
 
-Campaign strategist & creative director. Built with React, TypeScript, Tailwind CSS and Framer Motion; deployed to GitHub Pages on every push to `main`.
+Campaign Strategy & Brand Communications. Built with React, TypeScript, Tailwind CSS and Framer Motion; deployed to GitHub Pages on every push to `main`.
 
 ```bash
 npm install

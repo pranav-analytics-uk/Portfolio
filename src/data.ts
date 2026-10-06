@@ -3,7 +3,7 @@
 export const PROFILE = {
   firstName: 'Pranav',
   name: 'Pranav Raj Singh',
-  tagline: 'a campaign strategist & creative director making brand work people stop scrolling for',
+  tagline: 'campaign strategy & brand communications, making brand work people stop scrolling for',
   location: 'Glasgow, Scotland, UK',
   linkedin: 'https://www.linkedin.com/in/thepranavraj021',
   email: 'pranavrajsinghrajput@gmail.com',

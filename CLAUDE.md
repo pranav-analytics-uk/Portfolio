@@ -41,7 +41,7 @@ Run that first in every shell from this folder. `gh` is already signed in to the
 | Instagram reels (post URL + title) | `src/data.ts` → `REELS` |
 | Hero portrait photo | `public/me/pranav.jpg` (≈1600px tall, phones) and `public/me/pranav-full.jpg` (full res, desktop/retina) |
 | Hero Campaign screenshots | `public/hero-campaign/hero-N.jpg` (full res), `hero-N-sm.jpg` (≈1100px, phones), `photo-N.jpg` (photo cropped from the screenshot: left 1147×1311 px) |
-| Link-preview image (LinkedIn/WhatsApp card) | `public/og-image.jpg` (1200×630) |
+| Link-preview image (LinkedIn/WhatsApp card) | `public/og-image-v2.jpg` (1200×630) |
 | Page title, share-preview text | `index.html` |
 | Layout/styling of a section | `src/components/<Section>.tsx` |
 
