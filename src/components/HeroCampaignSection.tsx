@@ -3,7 +3,6 @@ import { useRef } from 'react';
 import { ArrowUpRight, Instagram } from 'lucide-react';
 import FadeIn from './FadeIn';
 import { MagnifyGroup, MagnifyItem } from './Magnify';
-import { track } from '../analytics';
 import { HERO_CASE, HERO_POSTS, TECNO_INSTAGRAM, heroScreenshot, heroScreenshotSmall } from '../data';
 
 const RADIUS = 'rounded-[40px] sm:rounded-[50px] md:rounded-[60px]';
@@ -65,7 +64,6 @@ function PostCard({
           rel="noopener noreferrer"
           aria-label={post.url ? `Open "${post.title}" on Instagram` : 'Open @tecnomobileindia on Instagram'}
           className="group relative block"
-          onClick={() => track('view_campaign_post', { post: post.title })}
         >
           <img
             src={heroScreenshot(post.file)}

@@ -1,15 +1,14 @@
 import { Download } from 'lucide-react';
 import { PROFILE, asset } from '../data';
-import { track } from '../analytics';
 
 /** Gradient "Download CV" pill (same look as Contact Me). Renders nothing until PROFILE.cv points at a PDF in public/. */
-export default function CvButton({ placement }: { placement: string }) {
+// cv_download is tracked globally in analytics.ts (any link ending in .pdf)
+export default function CvButton(_props: { placement: string }) {
   if (!PROFILE.cv) return null;
   return (
     <a
       href={asset(PROFILE.cv)}
       download="Pranav_Raj_Singh_CV.pdf"
-      onClick={() => track('cv_download', { placement })}
       className="inline-flex items-center gap-2.5 whitespace-nowrap rounded-full px-8 py-3 text-xs font-medium uppercase tracking-widest text-white transition-transform duration-200 hover:scale-[1.03] sm:px-10 sm:py-3.5 sm:text-sm md:px-12 md:py-4 md:text-base"
       style={{
         background: 'linear-gradient(123deg, #18011F 7%, #B600A8 37%, #7621B0 72%, #BE4C00 100%)',

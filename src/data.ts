@@ -1,7 +1,7 @@
 // Portfolio content, sourced from Pranav's LinkedIn profile.
 
 // Google Analytics 4 Measurement ID (G-XXXXXXXXXX). Empty = no analytics and no cookie banner.
-export const ANALYTICS_ID = '';
+export const ANALYTICS_ID = 'G-GEV4MQCTKT';
 
 export const PROFILE = {
   firstName: 'Pranav',

@@ -1,7 +1,7 @@
 import { Linkedin, Mail, MapPin, Phone } from 'lucide-react';
 import FadeIn from './FadeIn';
 import ContactButton from './ContactButton';
-import { analyticsEnabled, track } from '../analytics';
+import { analyticsEnabled } from '../analytics';
 import { PROFILE } from '../data';
 
 const CHANNELS = [
@@ -38,7 +38,6 @@ export default function ContactSection() {
           <FadeIn key={label} delay={0.15 + i * 0.1}>
             <a
               href={href}
-              onClick={() => track('contact_click', { method: label.toLowerCase() })}
               {...(href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
               className="group flex h-full items-center gap-4 rounded-[28px] border-2 border-[#D7E2EA]/30 px-6 py-5 text-left text-[#D7E2EA] sm:flex-col sm:gap-3 sm:rounded-[32px] sm:px-5 sm:py-8 sm:text-center transition-colors duration-200 hover:border-[#D7E2EA] hover:bg-[#D7E2EA]/5"
             >
