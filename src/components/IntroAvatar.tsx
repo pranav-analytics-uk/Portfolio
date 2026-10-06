@@ -3,6 +3,7 @@ import { Play, RotateCcw, Square, Volume2 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { INTRO, asset } from '../data';
 import { track } from '../analytics';
+import Magnet from './Magnet';
 
 // The hero centrepiece: Pranav's talking AI avatar.
 // It starts speaking as soon as the visitor shows up (first mouse move, scroll, touch,
@@ -127,7 +128,8 @@ export default function IntroAvatar() {
   useEffect(() => {
     if (!muted || playedWithSoundThisVisit()) return;
     const onActivate = (e: Event) => {
-      if ((e.target as HTMLElement | null)?.closest('[role="dialog"]')) return; // cookie banner
+      // Cookie banner, or the avatar itself (its own button restarts it with sound)
+      if ((e.target as HTMLElement | null)?.closest('[role="dialog"], [data-intro-avatar]')) return;
       ACTIVATION_EVENTS.forEach((ev) => window.removeEventListener(ev, onActivate, true));
       if (visible.current) start('unmute', true);
     };
@@ -165,13 +167,33 @@ export default function IntroAvatar() {
           the name and extending down (never up over the name) */}
       <div
         ref={wrapRef}
+        data-intro-avatar
         className="absolute left-1/2 top-[44%] z-10 -translate-x-1/2 -translate-y-1/2 sm:translate-y-0"
         style={desktopBox ? { top: desktopBox.top } : undefined}
       >
-        <div
+        {/* Entrance: rises and fades in */}
+        <motion.div
+          initial={{ opacity: 0, y: 40, scale: 0.92 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 1.1, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+        >
+        {/* Follows the cursor (magnetic) */}
+        <Magnet padding={220} strength={6} maxShift={24} activeTransition="transform 0.4s ease-out" inactiveTransition="transform 0.8s ease-in-out">
+        {/* Gentle idle float; settles while speaking */}
+        <motion.div
+          animate={state === 'playing' ? { y: 0 } : { y: [0, -10, 0] }}
+          transition={state === 'playing' ? { duration: 0.6 } : { duration: 5, repeat: Infinity, ease: 'easeInOut' }}
           className="relative aspect-square w-[86vw] max-w-[430px] sm:max-w-none"
           style={desktopBox ? { width: desktopBox.size } : undefined}
         >
+          {/* Soft purple glow behind the face that breathes while he speaks */}
+          <motion.span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-[14%] -z-10 rounded-full blur-3xl"
+            style={{ background: 'radial-gradient(circle, rgba(182,0,168,0.55), rgba(118,33,176,0.25) 55%, transparent 75%)' }}
+            animate={state === 'playing' ? { opacity: [0.35, 0.7, 0.35], scale: [0.95, 1.05, 0.95] } : { opacity: 0.18, scale: 1 }}
+            transition={state === 'playing' ? { duration: 1.6, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.8 }}
+          />
           <button
             type="button"
             onClick={() => start('avatar_click', true)}
@@ -215,7 +237,9 @@ export default function IntroAvatar() {
             </>
           )}
         </button>
-        </div>
+        </motion.div>
+        </Magnet>
+        </motion.div>
       </div>
 
       {/* Subtitles (and the sound hint when the browser blocked audio) */}

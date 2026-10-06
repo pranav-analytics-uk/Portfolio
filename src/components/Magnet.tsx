@@ -7,6 +7,8 @@ interface MagnetProps {
   activeTransition?: string;
   inactiveTransition?: string;
   className?: string;
+  /** Optional cap on how far it may drift, in px per axis */
+  maxShift?: number;
 }
 
 export default function Magnet({
@@ -16,6 +18,7 @@ export default function Magnet({
   activeTransition = 'transform 0.3s ease-out',
   inactiveTransition = 'transform 0.6s ease-in-out',
   className,
+  maxShift = Infinity,
 }: MagnetProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
@@ -33,7 +36,8 @@ export default function Magnet({
 
       if (dx < width / 2 + padding && dy < height / 2 + padding) {
         setActive(true);
-        setPos({ x: (e.clientX - cx) / strength, y: (e.clientY - cy) / strength });
+        const clamp = (n: number) => Math.max(-maxShift, Math.min(maxShift, n));
+        setPos({ x: clamp((e.clientX - cx) / strength), y: clamp((e.clientY - cy) / strength) });
       } else {
         setActive(false);
         setPos({ x: 0, y: 0 });
@@ -41,7 +45,7 @@ export default function Magnet({
     };
     window.addEventListener('mousemove', handleMove);
     return () => window.removeEventListener('mousemove', handleMove);
-  }, [padding, strength]);
+  }, [padding, strength, maxShift]);
 
   return (
     <div ref={ref} className={className}>
