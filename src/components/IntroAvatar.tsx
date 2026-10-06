@@ -130,15 +130,15 @@ export default function IntroAvatar() {
 
   return (
     <>
-      <div
-        ref={wrapRef}
-        className="absolute left-1/2 top-[44%] z-10 -translate-x-1/2 -translate-y-1/2 sm:top-[14%] sm:translate-y-0"
-      >
+      {/* Fills the space between the name and the bottom row, so it never covers either */}
+      <div ref={wrapRef} className="relative z-10 min-h-0 flex-1">
+        <div className="absolute inset-0 flex items-center justify-center py-2 sm:py-3">
+        <div className="relative aspect-square" style={{ height: 'min(100%, 92vw)' }}>
           <button
             type="button"
             onClick={() => start('avatar_click', true)}
             aria-label="Play Pranav's video introduction again, with sound"
-            className="block cursor-pointer"
+            className="block h-full w-full cursor-pointer"
           >
             <video
               ref={videoRef}
@@ -153,7 +153,7 @@ export default function IntroAvatar() {
                 track('intro_complete', { sound: muted ? 'off' : 'on' });
               }}
               aria-hidden="true"
-              className="block aspect-square w-[86vw] max-w-[430px] select-none object-cover sm:h-[62vh] sm:w-auto sm:max-w-none md:h-[66vh] lg:h-[70vh]"
+              className="block h-full w-full select-none object-cover"
               style={{ WebkitMaskImage: MASK, maskImage: MASK }}
             />
           </button>
@@ -177,6 +177,8 @@ export default function IntroAvatar() {
             </>
           )}
         </button>
+        </div>
+        </div>
       </div>
 
       {/* Subtitles (and the sound hint when the browser blocked audio) */}

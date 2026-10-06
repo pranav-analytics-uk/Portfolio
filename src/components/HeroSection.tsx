@@ -36,6 +36,9 @@ export default function HeroSection() {
         </FadeIn>
       </div>
 
+      {/* Talking AI avatar is the hero centrepiece (portrait photo removed for now; files kept in public/me/) */}
+      <IntroAvatar />
+
       <div className="relative z-20 mt-auto flex items-end justify-between gap-4 px-6 pb-7 sm:pb-8 md:px-10 md:pb-10">
         <FadeIn delay={0.35} y={20}>
           <p
@@ -50,8 +53,6 @@ export default function HeroSection() {
         </FadeIn>
       </div>
 
-      {/* Talking AI avatar is the hero centrepiece (portrait photo removed for now; files kept in public/me/) */}
-      <IntroAvatar />
 
     </section>
   );
