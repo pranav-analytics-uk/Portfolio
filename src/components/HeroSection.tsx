@@ -1,7 +1,6 @@
 import FadeIn from './FadeIn';
 import Magnet from './Magnet';
 import ContactButton from './ContactButton';
-import CvButton from './CvButton';
 import { PROFILE, asset } from '../data';
 
 // Fades all four edges so the photo's studio backdrop melts into the page.
@@ -52,8 +51,7 @@ export default function HeroSection() {
             {PROFILE.tagline}
           </p>
         </FadeIn>
-        <FadeIn delay={0.5} y={20} className="flex flex-col items-end gap-2 sm:flex-row sm:items-center sm:gap-3">
-          <CvButton placement="hero" />
+        <FadeIn delay={0.5} y={20}>
           <ContactButton />
         </FadeIn>
       </div>

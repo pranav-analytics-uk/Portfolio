@@ -43,7 +43,7 @@ Run that first in every shell from this folder. `gh` is already signed in to the
 | Hero Campaign screenshots | `public/hero-campaign/hero-N.webp` (full res 2150px), `hero-N-sm.webp` (1100px, phones), `photo-N.webp` (photo cropped from the screenshot: left 1147×1311 px), `photo-N-sm.webp` (640px, marquee/About). Sources: `~/Desktop/Hero Campaign/*.png` |
 | Heroes case study (Brief / What I did / Result) | `src/data.ts` → `HERO_CASE` |
 | Skills & Tools chips | `src/data.ts` → `SKILLS` (only list skills Pranav has confirmed) |
-| Download CV button | Put the PDF in `public/cv/` and set `PROFILE.cv` in `src/data.ts` (e.g. `'cv/Pranav_Raj_Singh_CV.pdf'`). Empty = button hidden |
+| Download CV (About section only) | `public/cv/Pranav_Raj_Singh_CV.pdf` (source: `~/Downloads/Pranav_Raj_Singh_CV.pdf`). Replace that file to update the CV; `PROFILE.cv` in `src/data.ts` points at it (empty = hidden) |
 | Google Analytics | `ANALYTICS_ID` in `src/data.ts` (G-XXXXXXXXXX). Empty = no analytics, no cookie banner. Logic in `src/analytics.ts`, banner in `src/components/ConsentBanner.tsx` |
 | Sitemap / robots | `public/sitemap.xml` (update `lastmod` on big changes), `public/robots.txt` |
 | Link-preview image (LinkedIn/WhatsApp card) | `public/og-image-v2.jpg` (1200×630, stays JPG for social crawlers). Regenerate with `scripts/og-image.swift`; bump the file name (v3…) and update `index.html` so LinkedIn refetches |

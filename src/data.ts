@@ -14,7 +14,7 @@ export const PROFILE = {
   phoneHref: 'tel:+447721553986',
   availability: 'Open to UK graduate roles from April 2027',
   // Path of the CV PDF inside public/ (e.g. 'cv/Pranav_Raj_Singh_CV.pdf'). Empty = no Download CV button.
-  cv: '',
+  cv: 'cv/Pranav_Raj_Singh_CV.pdf',
   about:
     "I'm a marketer and photographer who owns campaigns end to end, from the first idea to the final cut. At TECNO Mobile India I created Heroes, a six-part portrait series shot entirely on TECNO phones. Now I'm completing an MSc in Marketing at Strathclyde, building my AI and paid media skills. Let's make something people remember!",
 };

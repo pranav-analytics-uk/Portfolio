@@ -1,5 +1,6 @@
 import FadeIn from './FadeIn';
 import AnimatedText from './AnimatedText';
+import CvButton from './CvButton';
 import { PROFILE, STATS, heroPhotoSmall } from '../data';
 
 // Four frames from the Heroes series stand in for the template's 3D corner objects.
@@ -60,6 +61,17 @@ export default function AboutSection() {
           ))}
         </div>
 
+        {PROFILE.cv && (
+          <FadeIn delay={0.2} className="flex flex-col items-center gap-5 text-center">
+            <p
+              className="font-light uppercase tracking-widest text-[#D7E2EA]/70"
+              style={{ fontSize: 'clamp(0.8rem, 1.2vw, 1rem)' }}
+            >
+              The one-page version · PDF
+            </p>
+            <CvButton placement="about" />
+          </FadeIn>
+        )}
       </div>
     </section>
   );

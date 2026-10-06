@@ -1,7 +1,6 @@
 import { Linkedin, Mail, MapPin, Phone } from 'lucide-react';
 import FadeIn from './FadeIn';
 import ContactButton from './ContactButton';
-import CvButton from './CvButton';
 import { analyticsEnabled, track } from '../analytics';
 import { PROFILE } from '../data';
 
@@ -55,9 +54,8 @@ export default function ContactSection() {
         ))}
       </div>
 
-      <FadeIn delay={0.45} className="flex flex-wrap items-center justify-center gap-3">
+      <FadeIn delay={0.45}>
         <ContactButton href={`mailto:${PROFILE.email}`} label="Email me" />
-        <CvButton placement="contact" />
       </FadeIn>
 
       <footer className="mt-12 flex w-full max-w-7xl flex-col-reverse items-center justify-between gap-6 sm:mt-16 sm:flex-row sm:flex-wrap sm:gap-4 text-xs uppercase tracking-widest text-[#D7E2EA]/50">
