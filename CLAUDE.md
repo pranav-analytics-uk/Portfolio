@@ -52,5 +52,4 @@ Section order is in `src/App.tsx`: Hero → Marquee → About → Experience →
 - **Asset paths:** always use `asset('path')` / the helpers in `src/data.ts`, never a leading `/`. The site lives under `/Portfolio/` (`base` in `vite.config.ts`); root paths break on the live site.
 - **New images:** add a full-res file plus a smaller phone copy and use `srcSet` (see `HeroSection.tsx` / `HeroCampaignSection.tsx`). Convert with `sips` (built into macOS).
 - **Phone layout:** phones get swipe rows for films/reels, stacked experience rows, and hidden About corner photos. Anything new must be checked at 390px wide with no sideways scrolling.
-- **Hero Campaign links:** each `HERO_POSTS[i].url` is empty until the owner supplies the Instagram post link; empty cards fall back to the @tecnomobileindia profile.
 - Style: dark `#0C0C0C`, font Kanit, gradient headings use the `.hero-heading` class, buttons are `ContactButton` / `LiveProjectButton`.

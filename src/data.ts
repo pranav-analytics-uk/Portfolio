@@ -72,12 +72,12 @@ export const CERTIFICATIONS = [
 // The six Heroes posts, in publishing order.
 // `url` is the Instagram post link; when set, the card opens it on tap.
 export const HERO_POSTS = [
-  { file: 3, url: '', title: 'A heart full of flame.', subject: 'Welder', device: 'CAMON 30 Premier 5G', date: '1 Aug 2025', likes: '46.6K' },
-  { file: 2, url: '', title: 'Brewed with Pride', subject: 'Chai vendor', device: 'CAMON 30 Premier 5G', date: '2 Aug 2025', likes: '69K' },
-  { file: 1, url: '', title: 'Grease, Grind & Grit.', subject: 'Cycle mechanic', device: 'POVA Curve 5G', date: '3 Aug 2025', likes: '45.5K' },
-  { file: 4, url: '', title: 'Blisters on his hand, fire in his heart.', subject: 'Metal grinder', device: 'CAMON 30 Premier 5G', date: '4 Aug 2025', likes: '48.9K' },
-  { file: 5, url: '', title: 'Craft defies Conformity', subject: 'Workshop craftsmen', device: 'CAMON 30 Premier 5G', date: '5 Aug 2025', likes: '39.5K' },
-  { file: 6, url: '', title: 'Carrying the weight of Quiet Courage', subject: 'Porter', device: 'SPARK 30C 5G', date: '6 Aug 2025', likes: '3.4K' },
+  { file: 3, url: 'https://www.instagram.com/p/DM0A5oChTNz/', title: 'A heart full of flame.', subject: 'Welder', device: 'CAMON 30 Premier 5G', date: '1 Aug 2025', likes: '46.6K' },
+  { file: 2, url: 'https://www.instagram.com/p/DM2j5_DBl7r/', title: 'Brewed with Pride', subject: 'Chai vendor', device: 'CAMON 30 Premier 5G', date: '2 Aug 2025', likes: '69K' },
+  { file: 1, url: 'https://www.instagram.com/p/DM5JiGahvPp/', title: 'Grease, Grind & Grit.', subject: 'Cycle mechanic', device: 'POVA Curve 5G', date: '3 Aug 2025', likes: '45.5K' },
+  { file: 4, url: 'https://www.instagram.com/p/DM7vpoeBTi_/', title: 'Blisters on his hand, fire in his heart.', subject: 'Metal grinder', device: 'CAMON 30 Premier 5G', date: '4 Aug 2025', likes: '48.9K' },
+  { file: 5, url: 'https://www.instagram.com/p/DM-XbsCBp3s/', title: 'Craft defies Conformity', subject: 'Workshop craftsmen', device: 'CAMON 30 Premier 5G', date: '5 Aug 2025', likes: '39.5K' },
+  { file: 6, url: 'https://www.instagram.com/p/DNBIl3chBUC/', title: 'Carrying the weight of Quiet Courage', subject: 'Porter', device: 'SPARK 30C 5G', date: '6 Aug 2025', likes: '3.4K' },
 ];
 
 export const TECNO_INSTAGRAM = 'https://www.instagram.com/tecnomobileindia/';
