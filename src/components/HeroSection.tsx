@@ -1,14 +1,7 @@
 import FadeIn from './FadeIn';
-import Magnet from './Magnet';
 import IntroAvatar from './IntroAvatar';
 import ContactButton from './ContactButton';
-import { PROFILE, asset } from '../data';
-
-// Fades all four edges so the photo's studio backdrop melts into the page.
-const PORTRAIT_MASK = [
-  'linear-gradient(to bottom, transparent 0%, #000 14%, #000 70%, transparent 100%)',
-  'linear-gradient(to right, transparent 0%, #000 16%, #000 84%, transparent 100%)',
-].join(', ');
+import { PROFILE } from '../data';
 
 const NAV_LINKS = [
   { label: 'About', href: '#about' },
@@ -57,29 +50,9 @@ export default function HeroSection() {
         </FadeIn>
       </div>
 
+      {/* Talking AI avatar is the hero centrepiece (portrait photo removed for now; files kept in public/me/) */}
       <IntroAvatar />
 
-      {/* Portrait: dark studio shot, edges faded into the page background */}
-      <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-[46%] sm:bottom-0 sm:top-auto sm:translate-y-0">
-        <FadeIn delay={0.6} y={30}>
-          <Magnet
-            padding={150}
-            strength={3}
-            activeTransition="transform 0.3s ease-out"
-            inactiveTransition="transform 0.6s ease-in-out"
-          >
-            <img
-              src={asset('me/pranav.webp')}
-              srcSet={`${asset('me/pranav.webp')} 1067w, ${asset('me/pranav-full.webp')} 2156w`}
-              sizes="(min-width: 640px) 60vh, 45vh"
-              alt="Portrait of Pranav Raj Singh"
-              draggable={false}
-              className="block h-[66vh] w-auto max-w-[100vw] select-none object-contain sm:h-[74vh] md:h-[80vh] lg:h-[84vh]"
-              style={{ WebkitMaskImage: PORTRAIT_MASK, WebkitMaskComposite: 'source-in', maskImage: PORTRAIT_MASK, maskComposite: 'intersect' }}
-            />
-          </Magnet>
-        </FadeIn>
-      </div>
     </section>
   );
 }

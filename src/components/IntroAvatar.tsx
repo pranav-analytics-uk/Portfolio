@@ -1,20 +1,26 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { Play, RotateCcw, Square } from 'lucide-react';
+import { Volume2 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { INTRO, asset } from '../data';
 import { track } from '../analytics';
+import Magnet from './Magnet';
 
-// Talking AI-avatar welcome, shown as a round bubble in the hero.
-// Browsers block sound until the visitor interacts, so it starts on their first
-// click/tap/key press while the hero is on screen (once per visit), or when the
-// bubble itself is pressed. Captions mirror the audio; it pauses if scrolled away.
+// The hero centrepiece: Pranav's talking AI avatar.
+// It starts speaking as soon as the visitor shows up (first mouse move, scroll, touch,
+// click or key). Browsers only allow sound after a click/tap/key press, so when sound
+// is blocked it plays muted with captions and restarts with sound on the first click.
 
-type State = 'idle' | 'playing' | 'ended';
+type State = 'waiting' | 'playing' | 'ended';
 const SESSION_KEY = 'pr-intro-played';
 
-const GRADIENT = 'linear-gradient(123deg, #18011F 7%, #B600A8 37%, #7621B0 72%, #BE4C00 100%)';
+// No touchstart: on phones the tap itself (click) should start it, which also allows sound
+const PRESENCE_EVENTS = ['pointermove', 'wheel', 'scroll', 'keydown', 'click'] as const;
+const ACTIVATION_EVENTS = ['click', 'keydown', 'touchend'] as const;
 
-function alreadyPlayedThisVisit() {
+// Soft circular fade so the square video melts into the page background
+const MASK = 'radial-gradient(closest-side, #000 80%, transparent 100%)';
+
+function playedWithSoundThisVisit() {
   try {
     return sessionStorage.getItem(SESSION_KEY) === '1';
   } catch {
@@ -24,27 +30,45 @@ function alreadyPlayedThisVisit() {
 
 export default function IntroAvatar() {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const bubbleRef = useRef<HTMLDivElement>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
   const visible = useRef(true);
-  const [state, setState] = useState<State>('idle');
+  const [state, setState] = useState<State>('waiting');
+  const [muted, setMuted] = useState(false);
   const [caption, setCaption] = useState('');
 
-  const play = useCallback((trigger: string) => {
+  const markSound = () => {
+    try {
+      sessionStorage.setItem(SESSION_KEY, '1');
+    } catch {
+      // ignore
+    }
+  };
+
+  /** Play from the start, with sound if the browser allows it, otherwise muted. */
+  const start = useCallback((trigger: string, wantSound: boolean) => {
     const v = videoRef.current;
     if (!v) return;
     v.currentTime = 0;
-    v.muted = false;
+    v.muted = !wantSound;
     v.play()
       .then(() => {
         setState('playing');
-        try {
-          sessionStorage.setItem(SESSION_KEY, '1');
-        } catch {
-          // ignore
-        }
-        track('intro_play', { trigger });
+        setMuted(v.muted);
+        if (!v.muted) markSound();
+        track('intro_play', { trigger, sound: v.muted ? 'off' : 'on' });
       })
-      .catch(() => setState('idle')); // e.g. the browser still refused sound
+      .catch(() => {
+        if (!wantSound) return;
+        // Sound blocked (no click/tap yet): play silently with captions instead
+        v.muted = true;
+        v.play()
+          .then(() => {
+            setState('playing');
+            setMuted(true);
+            track('intro_play', { trigger, sound: 'blocked' });
+          })
+          .catch(() => setState('waiting'));
+      });
   }, []);
 
   const stop = useCallback(() => {
@@ -55,35 +79,43 @@ export default function IntroAvatar() {
     setCaption('');
   }, []);
 
-  // Start on the visitor's first interaction anywhere (while the hero is visible), once per visit
+  // 1) First sign of the visitor → start speaking
   useEffect(() => {
-    if (!INTRO.video || alreadyPlayedThisVisit()) return;
-    const onFirst = (e: Event) => {
-      const t = e.target as HTMLElement | null;
-      // The bubble handles its own clicks; ignore the cookie banner
-      if (t?.closest('[data-intro-avatar], [role="dialog"]')) return;
-      if (alreadyPlayedThisVisit()) return cleanup();
-      if (!visible.current) return; // wait for an interaction while the hero is on screen
-      cleanup();
-      play('first_interaction');
+    if (!INTRO.video || playedWithSoundThisVisit()) return;
+    let fired = false;
+    const onPresence = () => {
+      if (fired || !visible.current) return;
+      fired = true;
+      PRESENCE_EVENTS.forEach((ev) => window.removeEventListener(ev, onPresence, true));
+      start('arrival', true);
     };
-    const cleanup = () => {
-      window.removeEventListener('click', onFirst, true);
-      window.removeEventListener('keydown', onFirst, true);
+    PRESENCE_EVENTS.forEach((ev) => window.addEventListener(ev, onPresence, { capture: true, passive: true }));
+    return () => PRESENCE_EVENTS.forEach((ev) => window.removeEventListener(ev, onPresence, true));
+  }, [start]);
+
+  // 2) If it had to play silently, the first click/tap/key restarts it with sound
+  useEffect(() => {
+    if (!muted || playedWithSoundThisVisit()) return;
+    const onActivate = (e: Event) => {
+      if ((e.target as HTMLElement | null)?.closest('[role="dialog"]')) return; // cookie banner
+      ACTIVATION_EVENTS.forEach((ev) => window.removeEventListener(ev, onActivate, true));
+      if (visible.current) start('unmute', true);
     };
-    window.addEventListener('click', onFirst, true);
-    window.addEventListener('keydown', onFirst, true);
-    return cleanup;
-  }, [play]);
+    ACTIVATION_EVENTS.forEach((ev) => window.addEventListener(ev, onActivate, true));
+    return () => ACTIVATION_EVENTS.forEach((ev) => window.removeEventListener(ev, onActivate, true));
+  }, [muted, start]);
 
   // Pause when the hero scrolls out of view
   useEffect(() => {
-    const el = bubbleRef.current;
+    const el = wrapRef.current;
     if (!el) return;
-    const io = new IntersectionObserver(([entry]) => {
-      visible.current = entry.isIntersecting;
-      if (!entry.isIntersecting && videoRef.current && !videoRef.current.paused) stop();
-    }, { threshold: 0.2 });
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        visible.current = entry.isIntersecting;
+        if (!entry.isIntersecting && videoRef.current && !videoRef.current.paused) stop();
+      },
+      { threshold: 0.25 },
+    );
     io.observe(el);
     return () => io.disconnect();
   }, [stop]);
@@ -91,113 +123,52 @@ export default function IntroAvatar() {
   if (!INTRO.video) return null;
 
   const onTime = () => {
-    const t = videoRef.current?.currentTime ?? 0;
-    setCaption(INTRO.captions.find((c) => t >= c.start && t < c.end)?.text ?? '');
+    const v = videoRef.current;
+    // Pausing fires a last timeupdate; ignore it so a caption can't stick after stopping
+    if (!v || v.paused) return;
+    setCaption(INTRO.captions.find((c) => v.currentTime >= c.start && v.currentTime < c.end)?.text ?? '');
   };
-
-  const playing = state === 'playing';
 
   return (
     <>
       <div
-        ref={bubbleRef}
-        data-intro-avatar
-        className="absolute left-4 top-[22%] z-30 flex flex-col items-center gap-2 sm:left-8 sm:top-[36%] md:left-10 lg:left-14"
+        ref={wrapRef}
+        className="absolute left-1/2 top-[44%] z-10 -translate-x-1/2 -translate-y-1/2 sm:top-[14%] sm:translate-y-0"
       >
-        <motion.button
-          type="button"
-          onClick={() => (playing ? stop() : play('button'))}
-          aria-label={playing ? 'Stop video introduction' : "Play Pranav's video introduction (with sound)"}
-          animate={{ scale: playing ? 1.28 : 1 }}
-          transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-          className="group relative block origin-top-left rounded-full p-[3px] shadow-[0_20px_60px_rgba(0,0,0,0.6)] sm:origin-left"
-          style={{ background: playing ? GRADIENT : 'rgba(215,226,234,0.45)' }}
-        >
-          {/* Soft pulse inviting the first play */}
-          {state === 'idle' && (
-            <motion.span
-              aria-hidden="true"
-              className="pointer-events-none absolute -inset-[3px] rounded-full motion-reduce:hidden"
-              style={{ background: GRADIENT }}
-              animate={{ scale: [1, 1.18], opacity: [0.55, 0] }}
-              transition={{ duration: 2.2, repeat: Infinity, ease: 'easeOut' }}
-            />
-          )}
-          <span className="relative block h-[84px] w-[84px] overflow-hidden rounded-full bg-[#0C0C0C] sm:h-[120px] sm:w-[120px] md:h-[150px] md:w-[150px] lg:h-[176px] lg:w-[176px]">
+        <Magnet padding={150} strength={3} activeTransition="transform 0.3s ease-out" inactiveTransition="transform 0.6s ease-in-out">
+          <button
+            type="button"
+            onClick={() => start('avatar_click', true)}
+            aria-label="Play Pranav's video introduction again, with sound"
+            className="block cursor-pointer"
+          >
             <video
               ref={videoRef}
               src={asset(INTRO.video)}
               poster={asset(INTRO.poster)}
               playsInline
-              preload="metadata"
+              preload="auto"
               onTimeUpdate={onTime}
               onEnded={() => {
                 setState('ended');
                 setCaption('');
-                track('intro_complete');
+                track('intro_complete', { sound: muted ? 'off' : 'on' });
               }}
-              className="h-full w-full scale-[1.06] object-cover"
               aria-hidden="true"
+              className="block aspect-square w-[86vw] max-w-[430px] select-none object-cover sm:h-[62vh] sm:w-auto sm:max-w-none md:h-[66vh] lg:h-[70vh]"
+              style={{ WebkitMaskImage: MASK, maskImage: MASK }}
             />
-            {!playing && (
-              <span className="absolute inset-0 flex items-center justify-center bg-black/25 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                {state === 'ended' ? (
-                  <RotateCcw className="h-6 w-6 text-white" />
-                ) : (
-                  <Play className="ml-0.5 h-6 w-6 fill-white text-white" />
-                )}
-              </span>
-            )}
-          </span>
-        </motion.button>
-
-        <AnimatePresence mode="wait">
-          {!playing && (
-            <motion.button
-              key={state}
-              type="button"
-              onClick={() => play('label')}
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 4 }}
-              className="flex flex-col items-center gap-0.5 text-[#D7E2EA]"
-            >
-              <span className="flex items-center gap-1.5 whitespace-nowrap rounded-full border border-[#D7E2EA]/40 bg-[#0C0C0C]/70 px-3 py-1 text-[10px] font-medium uppercase tracking-widest backdrop-blur sm:text-xs">
-                {state === 'ended' ? (
-                  <>
-                    <RotateCcw className="h-3 w-3" /> Replay
-                  </>
-                ) : (
-                  <>
-                    <Play className="h-3 w-3 fill-current" /> Meet Pranav
-                  </>
-                )}
-              </span>
-              <span className="text-[9px] font-light uppercase tracking-[0.2em] text-[#D7E2EA]/50 sm:text-[10px]">
-                AI avatar · sound on
-              </span>
-            </motion.button>
-          )}
-          {playing && (
-            <motion.button
-              key="stop"
-              type="button"
-              onClick={stop}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="mt-7 flex translate-x-[14%] items-center gap-1.5 rounded-full border border-[#D7E2EA]/40 bg-[#0C0C0C]/70 px-3 py-1 text-[10px] font-medium uppercase tracking-widest text-[#D7E2EA] backdrop-blur sm:mt-5 sm:text-xs md:mt-6 lg:mt-8"
-            >
-              <Square className="h-2.5 w-2.5 fill-current" /> Stop
-            </motion.button>
-          )}
-        </AnimatePresence>
+          </button>
+        </Magnet>
+        <p className="pointer-events-none absolute bottom-[16%] right-[4%] rounded-full border border-[#D7E2EA]/20 bg-[#0C0C0C]/60 px-2 py-0.5 text-[9px] font-light uppercase tracking-[0.25em] text-[#D7E2EA]/60 backdrop-blur sm:text-[10px]">
+          AI avatar
+        </p>
       </div>
 
-      {/* Subtitles, centred above the hero's bottom bar */}
+      {/* Subtitles (and the sound hint when the browser blocked audio) */}
       <div
         aria-live="polite"
-        className="pointer-events-none absolute inset-x-4 bottom-[132px] z-30 flex justify-center sm:bottom-[150px] md:bottom-[170px]"
+        className="pointer-events-none absolute inset-x-4 bottom-[140px] z-30 flex flex-col items-center gap-2 md:bottom-[150px] xl:bottom-[38px]"
       >
         <AnimatePresence mode="wait">
           {caption && (
@@ -207,10 +178,22 @@ export default function IntroAvatar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.2 }}
-              className="max-w-xl rounded-2xl bg-[#0C0C0C]/75 px-4 py-2 text-center font-medium text-white backdrop-blur"
+              className="max-w-full rounded-2xl md:max-w-[60vw] xl:max-w-[34vw] bg-[#0C0C0C]/75 px-4 py-2 text-center font-medium text-white backdrop-blur"
               style={{ fontSize: 'clamp(0.95rem, 1.6vw, 1.35rem)' }}
             >
               {caption}
+            </motion.p>
+          )}
+        </AnimatePresence>
+        <AnimatePresence>
+          {state === 'playing' && muted && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex items-center gap-1.5 rounded-full border border-[#D7E2EA]/30 bg-[#0C0C0C]/70 px-3 py-1 text-[10px] font-medium uppercase tracking-widest text-[#D7E2EA] backdrop-blur sm:text-xs"
+            >
+              <Volume2 className="h-3.5 w-3.5" /> Click anywhere for sound
             </motion.p>
           )}
         </AnimatePresence>
