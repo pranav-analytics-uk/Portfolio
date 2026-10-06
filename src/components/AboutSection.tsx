@@ -61,18 +61,22 @@ export default function AboutSection() {
           ))}
         </div>
 
-        {PROFILE.cv && (
-          <FadeIn delay={0.2} className="flex flex-col items-center gap-5 text-center">
+      </div>
+
+      {/* Download CV sits in the section's existing bottom padding, so the layout height is unchanged */}
+      {PROFILE.cv && (
+        <div className="absolute inset-x-0 bottom-4 z-10 flex justify-center sm:bottom-16 lg:bottom-20">
+          <FadeIn delay={0.2} className="flex flex-col items-center gap-2 text-center sm:gap-4">
             <p
               className="font-light uppercase tracking-widest text-[#D7E2EA]/70"
-              style={{ fontSize: 'clamp(0.8rem, 1.2vw, 1rem)' }}
+              style={{ fontSize: 'clamp(0.7rem, 1.1vw, 0.95rem)' }}
             >
-              The one-page version · PDF
+              Full CV · PDF
             </p>
             <CvButton placement="about" />
           </FadeIn>
-        )}
-      </div>
+        </div>
+      )}
     </section>
   );
 }
