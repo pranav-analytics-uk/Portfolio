@@ -66,6 +66,13 @@ export const EDUCATION = [
   { school: 'Noida International University', degree: "Bachelor's, Photography · Grade A+", period: 'Jul 2022 – Jun 2025' },
 ];
 
+// Talking welcome intro for the hero (planned). Script approved by Pranav; the player is built
+// once the video exists (real recording or AI avatar). Sound only plays after the visitor taps.
+export const INTRO = {
+  video: '', // e.g. 'intro/pranav-intro.mp4' in public/. Empty = not shown yet
+  script: "Hi, I'm Pranav, a campaign strategist and brand communicator. I'm here to build brands people talk about. Welcome in.",
+};
+
 // Keyword block for recruiters. Only skills backed by LinkedIn or confirmed by Pranav.
 export const SKILLS = [
   { group: 'Strategy', items: ['Campaign strategy', 'Brand strategy', 'Brand communications', 'Social media strategy', 'Content strategy', 'Consumer research'] },

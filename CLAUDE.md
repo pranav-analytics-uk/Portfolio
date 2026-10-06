@@ -48,6 +48,7 @@ Run that first in every shell from this folder. `gh` is already signed in to the
 | Sitemap / robots | `public/sitemap.xml` (update `lastmod` on big changes), `public/robots.txt` |
 | Link-preview image (LinkedIn/WhatsApp card) | `public/og-image-v2.jpg` (1200×630, stays JPG for social crawlers). Regenerate with `scripts/og-image.swift`; bump the file name (v3…) and update `index.html` so LinkedIn refetches |
 | Page title, share-preview text | `index.html` |
+| Welcome intro video + approved script (planned) | `src/data.ts` → `INTRO`. Not built yet: needs the video file. Plan: portrait stays as poster, tap-to-play with sound, captions = the script, plays once per visit, replay button |
 | Layout/styling of a section | `src/components/<Section>.tsx` |
 
 Section order is in `src/App.tsx`: Hero → Marquee → About → Experience → Hero Campaign → Published Work → Contact.
