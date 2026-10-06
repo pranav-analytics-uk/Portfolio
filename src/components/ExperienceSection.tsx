@@ -1,4 +1,5 @@
 import FadeIn from './FadeIn';
+import { MagnifyGroup, MagnifyItem } from './Magnify';
 import { CERTIFICATIONS, EDUCATION, EXPERIENCE, SKILLS } from '../data';
 
 const BORDER = '1px solid rgba(12, 12, 12, 0.15)';
@@ -19,9 +20,10 @@ export default function ExperienceSection() {
       </FadeIn>
 
       <div className="mx-auto max-w-5xl">
+        <MagnifyGroup max={1.04} range={360}>
         {EXPERIENCE.map((job, i) => (
+          <MagnifyItem key={job.company} className="bg-white">
           <FadeIn
-            key={job.company}
             delay={i * 0.1}
             className="flex flex-col items-start gap-3 py-8 sm:flex-row sm:gap-10 sm:py-10 md:gap-14 md:py-12"
             style={{ borderTop: BORDER, borderBottom: i === EXPERIENCE.length - 1 ? BORDER : undefined }}
@@ -47,7 +49,9 @@ export default function ExperienceSection() {
               </p>
             </div>
           </FadeIn>
+          </MagnifyItem>
         ))}
+        </MagnifyGroup>
 
         <FadeIn className="mt-16 text-[#0C0C0C] sm:mt-20 md:mt-24">
           <h3 className="mb-6 font-black uppercase" style={{ fontSize: 'clamp(1.5rem, 3vw, 2.5rem)' }}>
@@ -57,16 +61,17 @@ export default function ExperienceSection() {
             {SKILLS.map((g) => (
               <div key={g.group}>
                 <p className="mb-3 text-xs font-medium uppercase tracking-widest opacity-50 sm:text-sm">{g.group}</p>
-                <ul className="flex flex-wrap gap-2">
+                <MagnifyGroup as="ul" max={1.14} range={130} className="flex flex-wrap gap-2.5">
                   {g.items.map((s) => (
-                    <li
+                    <MagnifyItem
+                      as="li"
                       key={s}
-                      className="rounded-full border border-[#0C0C0C]/20 px-3.5 py-1.5 text-sm font-medium text-[#0C0C0C]"
+                      className="rounded-full border border-[#0C0C0C]/20 bg-white px-3.5 py-1.5 text-sm font-medium text-[#0C0C0C]"
                     >
                       {s}
-                    </li>
+                    </MagnifyItem>
                   ))}
-                </ul>
+                </MagnifyGroup>
               </div>
             ))}
           </div>

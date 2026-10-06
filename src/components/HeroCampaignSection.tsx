@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion
 import { useRef } from 'react';
 import { ArrowUpRight, Instagram } from 'lucide-react';
 import FadeIn from './FadeIn';
+import { MagnifyGroup, MagnifyItem } from './Magnify';
 import { track } from '../analytics';
 import { HERO_CASE, HERO_POSTS, TECNO_INSTAGRAM, heroScreenshot, heroScreenshotSmall } from '../data';
 
@@ -107,12 +108,12 @@ export default function HeroCampaignSection() {
         Hero Campaign
       </FadeIn>
 
-      <div className="mx-auto mt-10 grid max-w-6xl gap-4 sm:mt-14 md:grid-cols-3 md:gap-6">
+      <MagnifyGroup max={1.07} range={640} className="mx-auto mt-10 grid max-w-6xl gap-4 sm:mt-14 md:grid-cols-3 md:gap-6">
         {HERO_CASE.map((c, i) => (
+          <MagnifyItem key={c.label} className="h-full">
           <FadeIn
-            key={c.label}
             delay={0.1 + i * 0.1}
-            className="rounded-[28px] border-2 border-[#D7E2EA]/20 p-6 text-left md:rounded-[36px] md:p-8"
+            className="h-full rounded-[28px] border-2 border-[#D7E2EA]/20 bg-[#0C0C0C] p-6 text-left md:rounded-[36px] md:p-8"
           >
             <p className="mb-3 text-xs font-medium uppercase tracking-[0.25em] text-[#D7E2EA]/60 sm:text-sm">
               {String(i + 1).padStart(2, '0')} · {c.label}
@@ -121,8 +122,9 @@ export default function HeroCampaignSection() {
               {c.text}
             </p>
           </FadeIn>
+          </MagnifyItem>
         ))}
-      </div>
+      </MagnifyGroup>
       <FadeIn delay={0.4} className="mt-8 flex flex-wrap justify-center gap-2">
         {CHANNELS.map((c) => (
           <span

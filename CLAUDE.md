@@ -57,6 +57,7 @@ Section order is in `src/App.tsx`: Hero → Marquee → About → Experience →
 - **Asset paths:** always use `asset('path')` / the helpers in `src/data.ts`, never a leading `/`. The site lives under `/Portfolio/` (`base` in `vite.config.ts`); root paths break on the live site.
 - **New images:** WebP only (except the og image). Add a full-res file plus a smaller phone copy and use `srcSet` (see `HeroSection.tsx` / `HeroCampaignSection.tsx`). Convert with `scripts/to-webp.mjs`; `sips` (macOS) can resize/crop but cannot write WebP.
 - **Analytics consent:** Google scripts must only load after the visitor clicks Accept (`src/analytics.ts`). Track new key actions with `track('event_name', {...})`.
+- **Dock-style hover magnify:** `src/components/Magnify.tsx` (`MagnifyGroup` + `MagnifyItem`). Used on the Heroes Brief/What I did/Result cards, the Experience job rows and the Skills & Tools chips, but deliberately NOT on Education or Certifications. Mouse/trackpad only; tune with `max` (peak scale) and `range` (px). Don't add `will-change` (blurs text).
 - **Accessibility:** animated text must keep a screen-reader copy (see `AnimatedText.tsx`: `sr-only` text + `aria-hidden` letters).
 - **Phone layout:** phones get swipe rows for films/reels, stacked experience rows, and hidden About corner photos. Anything new must be checked at 390px wide with no sideways scrolling.
 - Style: dark `#0C0C0C`, font Kanit, gradient headings use the `.hero-heading` class, buttons are `ContactButton` / `LiveProjectButton`.
