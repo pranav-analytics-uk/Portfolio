@@ -19,6 +19,35 @@ const ACTIVATION_EVENTS = ['click', 'keydown', 'touchend'] as const;
 // Soft circular fade so the square video melts into the page background
 const MASK = 'radial-gradient(closest-side, #000 80%, transparent 100%)';
 
+// Tablet/desktop placement: top = just below the name; size = the previous large size
+// (62/66/70vh by breakpoint), trimmed only if it would run past the bottom of the screen.
+function useDesktopBox() {
+  const [box, setBox] = useState<{ top: number; size: number; wide: boolean } | null>(null);
+  useEffect(() => {
+    const measure = () => {
+      const w = window.innerWidth;
+      const h1 = document.querySelector<HTMLElement>('section h1');
+      if (w < 640 || !h1) return setBox(null);
+      // offsetTop/Height ignore the name's slide-in animation, so this is its resting position
+      const top = h1.offsetTop + h1.offsetHeight + 4;
+      const vh = window.innerHeight;
+      const wanted = (w >= 1024 ? 0.7 : w >= 768 ? 0.66 : 0.62) * vh;
+      setBox({ top, size: Math.round(Math.min(wanted, vh - top - 4)), wide: w >= 1024 });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    const h1 = document.querySelector('section h1');
+    if (h1) ro.observe(h1);
+    window.addEventListener('resize', measure);
+    document.fonts?.ready.then(measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', measure);
+    };
+  }, []);
+  return box;
+}
+
 function playedWithSoundThisVisit() {
   try {
     return sessionStorage.getItem(SESSION_KEY) === '1';
@@ -34,6 +63,8 @@ export default function IntroAvatar() {
   const [state, setState] = useState<State>('waiting');
   const [muted, setMuted] = useState(false);
   const [caption, setCaption] = useState('');
+  const desktopBox = useDesktopBox();
+  const side = Boolean(desktopBox?.wide);
 
   const markSound = () => {
     try {
@@ -130,10 +161,17 @@ export default function IntroAvatar() {
 
   return (
     <>
-      {/* Fills the space between the name and the bottom row, so it never covers either */}
-      <div ref={wrapRef} className="relative z-10 min-h-0 flex-1">
-        <div className="absolute inset-0 flex items-center justify-center py-2 sm:py-3">
-        <div className="relative aspect-square" style={{ height: 'min(100%, 92vw)' }}>
+      {/* Phones: centred as before. Tablet/desktop: the previous large size, starting just below
+          the name and extending down (never up over the name) */}
+      <div
+        ref={wrapRef}
+        className="absolute left-1/2 top-[44%] z-10 -translate-x-1/2 -translate-y-1/2 sm:translate-y-0"
+        style={desktopBox ? { top: desktopBox.top } : undefined}
+      >
+        <div
+          className="relative aspect-square w-[86vw] max-w-[430px] sm:max-w-none"
+          style={desktopBox ? { width: desktopBox.size } : undefined}
+        >
           <button
             type="button"
             onClick={() => start('avatar_click', true)}
@@ -178,13 +216,24 @@ export default function IntroAvatar() {
           )}
         </button>
         </div>
-        </div>
       </div>
 
       {/* Subtitles (and the sound hint when the browser blocked audio) */}
       <div
         aria-live="polite"
-        className="pointer-events-none absolute inset-x-4 bottom-[140px] z-30 flex flex-col items-center gap-2 md:bottom-[150px] xl:bottom-[38px]"
+        className={`pointer-events-none absolute z-30 flex flex-col gap-2 ${
+          side ? 'items-start' : 'inset-x-4 bottom-[140px] items-center sm:bottom-[88px] md:bottom-[150px]'
+        }`}
+        style={
+          side && desktopBox
+            ? {
+                // Large screens: a speech bubble beside the face, clear of the chin
+                left: `calc(50% + ${desktopBox.size * 0.36}px)`,
+                right: 24,
+                top: desktopBox.top + desktopBox.size * 0.4,
+              }
+            : undefined
+        }
       >
         <AnimatePresence mode="wait">
           {caption && (
@@ -194,7 +243,7 @@ export default function IntroAvatar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.2 }}
-              className="max-w-full rounded-2xl md:max-w-[60vw] xl:max-w-[34vw] bg-[#0C0C0C]/75 px-4 py-2 text-center font-medium text-white backdrop-blur"
+              className={`rounded-2xl ${side ? "max-w-[22rem] rounded-bl-md text-left" : "max-w-full text-center md:max-w-[60vw]"} bg-[#0C0C0C]/75 px-4 py-2 font-medium text-white backdrop-blur`}
               style={{ fontSize: 'clamp(0.95rem, 1.6vw, 1.35rem)' }}
             >
               {caption}
